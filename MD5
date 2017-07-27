@@ -1,0 +1,17 @@
+4457e71b7952ab406186729623580dcb *DESCRIPTION
+9c25e1cdc3b5122842a6a70fab49a522 *LICENSE
+7c95f93eb74dd5ef2ced07d1330c5989 *NAMESPACE
+262e5a680d3b51f54e3c6e517feb7fbd *R/simsurv.R
+c495e24e9c1e6d0859e00bcefaf30900 *build/partial.rdb
+e842968c1f5222b2a8253d803b368cbb *man/simsurv.Rd
+3feed13fa4355a067bef8fbf9cad9ede *tests/testthat.R
+dda7c246f90c8c9d5fd3d54ff1a048fb *tests/testthat/helpers/check_bias.R
+3886ea9f2cc4747275f004acb27fc8c6 *tests/testthat/helpers/is_exponential.R
+71ae17d6c83cce041f97ed4a59e63451 *tests/testthat/helpers/is_gompertz.R
+7b1b5e4903e5c3617ead52dd89ab706d *tests/testthat/helpers/is_weibull.R
+9c884f7b6857ec1737f3aeb5b79b8383 *tests/testthat/helpers/recover_betas.R
+e217a4b44aba17ef19eea99c8a4c51e9 *tests/testthat/helpers/recover_gammas.R
+98c0db4f8c5f61045f355f307b76433a *tests/testthat/helpers/recover_lambdas.R
+88843285f8b17dc482363f7d409ad104 *tests/testthat/helpers/recover_params.R
+0305d389a43b6081adb5e145c79e46bd *tests/testthat/helpers/sim_run.R
+2f2d9dddebe7c5fa35f6ecd7a0aca4ad *tests/testthat/test_simsurv.R
