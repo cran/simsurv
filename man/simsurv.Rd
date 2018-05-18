@@ -71,8 +71,8 @@ model for the survival distribution. If \code{TRUE}, then the distribution
 of the mixture components is determined by the \code{dist} argument.}
 
 \item{pmix}{Scalar between 0 and 1 defining the mixing parameter when
-\code{mixture = TRUE}. The baseline survival at time t is taken to be
-\eqn{S(t) = p * S_1(t) + (1 - p) * S_2(t)}
+\code{mixture = TRUE}. The baseline survival at time \eqn{t} is taken to be
+\eqn{S(t) = p S_1(t) + (1 - p) S_2(t)}
 where \eqn{S_1(t)} and \eqn{S_2(t)} are the baseline survival under each
 component of the mixture distribution.}
 
@@ -179,15 +179,15 @@ For the exponential and Weibull distributions, with scale parameter
 \eqn{lambda} and shape parameter \eqn{gamma} (with \eqn{gamma} fixed equal
 to 1 for the exponential distribution) the baseline hazard and survival
 functions used by \code{simsurv} are:
-\eqn{h(t) = gamma * lambda * t ^ {gamma - 1}} and
-\eqn{S(t) = exp(-lambda * t ^ {gamma})}.
+\eqn{h(t) = \gamma \lambda t ^ {\gamma - 1}} and
+\eqn{S(t) = \exp(-\lambda t ^ {\gamma})}.
 
 Note that this parameterisation differs from the one used by
 \code{\link{dweibull}} or the \code{\link[eha]{phreg}} modelling
 function in the \pkg{eha} package. The parameterisation used in those
 functions can be achieved by transforming the scale parameter via the
-relationship \eqn{b = lambda ^ {-1 / gamma}}, or equivalently
-\eqn{lambda = b ^ {-gamma}} where \eqn{b} is the scale parameter under
+relationship \eqn{b = \lambda ^ {\frac{-1}{\gamma}}}, or equivalently
+\eqn{\lambda = b ^ {-\gamma}} where \eqn{b} is the scale parameter under
 the parameterisation of the Weibull distribution used by
 \code{\link{dweibull}} or \code{\link[eha]{phreg}}.
 }
@@ -202,6 +202,7 @@ This package is modelled on the user-written \code{survsim} package
   # Generate times from a Weibull model including a binary
   # treatment variable, with log(hazard ratio) = -0.5, and censoring
   # after 5 years:
+  set.seed(9911)
   covs <- data.frame(id = 1:100, trt = stats::rbinom(100, 1L, 0.5))
   s1 <- simsurv(lambdas = 0.1, gammas = 1.5, betas = c(trt = -0.5),
                 x = covs, maxt = 5)

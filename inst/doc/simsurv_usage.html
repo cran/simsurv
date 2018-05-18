@@ -12,7 +12,7 @@
 
 <meta name="author" content="Sam Brilleman" />
 
-<meta name="date" content="2018-02-26" />
+<meta name="date" content="2018-05-18" />
 
 <title>How to use the simsurv package</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">How to use the simsurv package</h1>
 <h4 class="author"><em>Sam Brilleman</em></h4>
-<h4 class="date"><em>2018-02-26</em></h4>
+<h4 class="date"><em>2018-05-18</em></h4>
 
 
 <div id="TOC">
@@ -290,12 +290,12 @@ simdat &lt;-<span class="st"> </span><span class="kw">simsurv</span>(<span class
 simdat &lt;-<span class="st"> </span><span class="kw">merge</span>(simdat, covs)
 <span class="kw">head</span>(simdat)</code></pre></div>
 <pre><code>##   id eventtime status trt
-## 1  1  1.547790      1   0
-## 2  2  3.290966      1   1
-## 3  3  3.002969      1   0
+## 1  1  1.547778      1   0
+## 2  2  3.290928      1   1
+## 3  3  3.002991      1   0
 ## 4  4  5.000000      0   0
-## 5  5  4.227842      1   0
-## 6  6  4.044081      1   0</code></pre>
+## 5  5  4.227837      1   0
+## 6  6  4.044092      1   0</code></pre>
 <p>Then let us fit a flexible parametric model with two internal knots (i.e. 3 degrees of freedom) for the baseline hazard, and a time-dependent hazard ratio for the treatment effect. For the time-dependent hazard ratio we will use an interaction with log time (the same as used in the data generating model); this can be easily achieved using the <code>stpm2</code> function from the <strong>rstpm2</strong> package (Clements and Liu (2017)) and specifying the <code>tvc</code> option. Note that the <strong>rstpm2</strong> package and <strong>flexsurv</strong> packages can both be used to fit the Royston and Parmar flexible parametric survival model, however, they differ slightly in their post-estimation functionality and other possible extensions. Here, we use the <strong>rstpm2</strong> package because it allows us to easily specify time-dependent effects and then plot the time-dependent hazard ratio after fitting the model (as shown in the code below).</p>
 <p>The model with the time-dependent effect for treatment can be estimated using the following code</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod_tvc &lt;-<span class="st"> </span>rstpm2<span class="op">::</span><span class="kw">stpm2</span>(<span class="kw">Surv</span>(eventtime, status) <span class="op">~</span><span class="st"> </span>trt, 
@@ -389,11 +389,11 @@ times &lt;-<span class="st"> </span><span class="kw">simsurv</span>(<span class=
 <p>We can them examine the first few rows of the resulting data frame, to see the simulated event times and event indicator</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(times)</code></pre></div>
 <pre><code>##   id eventtime status
-## 1  1  7.676123      1
+## 1  1  7.676103      1
 ## 2  2 10.000000      0
-## 3  3  1.142881      1
+## 3  3  1.142876      1
 ## 4  4  2.429828      1
-## 5  5  6.901241      1
+## 5  5  6.901247      1
 ## 6  6  7.748474      1</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## id eventtime status
 ##  1  4.813339      1
