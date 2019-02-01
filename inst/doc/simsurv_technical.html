@@ -12,7 +12,7 @@
 
 <meta name="author" content="Sam Brilleman" />
 
-<meta name="date" content="2018-05-18" />
+<meta name="date" content="2019-02-01" />
 
 <title>Technical background to the simsurv package</title>
 
@@ -32,7 +32,7 @@
 
 <h1 class="title toc-ignore">Technical background to the simsurv package</h1>
 <h4 class="author"><em>Sam Brilleman</em></h4>
-<h4 class="date"><em>2018-05-18</em></h4>
+<h4 class="date"><em>2019-02-01</em></h4>
 
 
 <div id="TOC">
@@ -90,9 +90,9 @@
 <p><span class="math display">\[
   T_i^s = S_i^{-1}(U_i)
 \]</span></p>
-<p>where <span class="math inline">\(T_i^s\)</span> is the simulated event times for individual <span class="math inline">\(i\)</span>, <span class="math inline">\(S_i^{-1}(u)\)</span> is the inverted survival function defined previously, and <span class="math inline">\(U_i\)</span> is a random variable drawn from a <span class="math inline">\(U(0,1)\)</span> distribution. Note that if the cumulative baseline hazard is directly invertible then an analytic form will be available for <span class="math inline">\(S_i^{-1}(u)\)</span>. That is, we can just plug in random draws of <span class="math inline">\(U_i\)</span> and directly calcuate the simulated event times. Since independent draws of a <span class="math inline">\(U(0,1)\)</span> random variable are easily obtained using any standard statistical software, this method will be easy and fast for simulating event times.</p>
+<p>where <span class="math inline">\(T_i^s\)</span> is the simulated event times for individual <span class="math inline">\(i\)</span>, <span class="math inline">\(S_i^{-1}(u)\)</span> is the inverted survival function defined previously, and <span class="math inline">\(U_i\)</span> is a random variable drawn from a <span class="math inline">\(U(0,1)\)</span> distribution. Note that if the cumulative baseline hazard is directly invertible then an analytic form will be available for <span class="math inline">\(S_i^{-1}(u)\)</span>. That is, we can just plug in random draws of <span class="math inline">\(U_i\)</span> and directly calculate the simulated event times. Since independent draws of a <span class="math inline">\(U(0,1)\)</span> random variable are easily obtained using any standard statistical software, this method will be easy and fast for simulating event times.</p>
 <p>This method was first proposed by Bender et al. (2005) and is commonly known as the <em>cumulative hazard inversion method</em>.</p>
-<p>For the standard parameteric survival distributions included in the <strong>simsurv</strong> package (i.e. Weibull, exponential, Gompertz) an analytic form for <span class="math inline">\(S_i^{-1}(u)\)</span> does exist. Therefore, event times for these standard parametric distributions (assuming proportional hazards) are generated using the cumulative hazard inversion method. The parameterisations for each of these standard parametric distributions are shown next.</p>
+<p>For the standard parametric survival distributions included in the <strong>simsurv</strong> package (i.e. Weibull, exponential, Gompertz) an analytic form for <span class="math inline">\(S_i^{-1}(u)\)</span> does exist. Therefore, event times for these standard parametric distributions (assuming proportional hazards) are generated using the cumulative hazard inversion method. The parameterisations for each of these standard parametric distributions are shown next.</p>
 <div id="exponential-distribution" class="section level3">
 <h3>Exponential distribution</h3>
 <p>For the exponential distribution we have the following:</p>

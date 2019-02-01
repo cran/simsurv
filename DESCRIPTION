@@ -1,8 +1,8 @@
 Package: simsurv
 Type: Package
 Title: Simulate Survival Data
-Version: 0.2.2
-Date: 2018-05-18
+Version: 0.2.3
+Date: 2019-01-02
 Authors@R: c(person("Sam", "Brilleman", email = "sam.brilleman@monash.edu", 
                     role = c("cre", "aut", "cph")),
              person("Alessandro", "Gasparini", email = "ag475@leicester.ac.uk", 
@@ -28,15 +28,16 @@ Description: Simulate survival times from standard parametric survival
 License: GPL (>= 3) | file LICENSE
 Depends: R (>= 3.3.0)
 Imports: methods, stats
-Suggests: eha (>= 2.4.5), flexsurv (>= 1.1.0), knitr (>= 1.15.1), MASS,
-        rstpm2 (>= 1.4.1), survival (>= 2.40.1), testthat (>= 1.0.2)
+Suggests: BB (>= 2014.10.1), eha (>= 2.4.5), flexsurv (>= 1.1.0), knitr
+        (>= 1.15.1), MASS, rstpm2 (>= 1.4.1), survival (>= 2.40.1),
+        testthat (>= 1.0.2)
 VignetteBuilder: knitr
 LazyData: true
 BugReports: https://github.com/sambrilleman/simsurv/issues
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 NeedsCompilation: no
-Packaged: 2018-05-18 01:25:55 UTC; brillems
+Packaged: 2019-02-01 06:37:04 UTC; brillems
 Author: Sam Brilleman [cre, aut, cph],
   Alessandro Gasparini [ctb]
 Repository: CRAN
-Date/Publication: 2018-05-18 04:02:23 UTC
+Date/Publication: 2019-02-01 07:10:03 UTC
