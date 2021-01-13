@@ -1,4 +1,4 @@
-## ----setup, include=FALSE, message=FALSE---------------------------------
+## ----setup, include=FALSE, message=FALSE--------------------------------------
 knitr::opts_chunk$set(echo = TRUE,
                       fig.width = 7.5, 
                       fig.height = 5)
@@ -8,7 +8,7 @@ library(flexsurv)
 library(rstpm2)
 library(simsurv)
 
-## ---- example1-----------------------------------------------------------
+## ---- example1----------------------------------------------------------------
 # Define a function for analysing one simulated dataset
 sim_run <- function() {
   # Create a data frame with the subject IDs and treatment covariate
@@ -45,11 +45,11 @@ set.seed(908070)
 # Perform 100 replicates in simulation study
 rowMeans(replicate(100, sim_run()))
 
-## ---- brcancer_data------------------------------------------------------
+## ---- brcancer_data-----------------------------------------------------------
 data("brcancer")
 head(brcancer)
 
-## ---- brcancer_models----------------------------------------------------
+## ---- brcancer_models---------------------------------------------------------
 # Fit the Weibull survival model
 mod_weib <- flexsurv::flexsurvspline(Surv(rectime, censrec) ~ hormon, 
                                      data = brcancer, k = 0)
@@ -58,7 +58,7 @@ mod_weib <- flexsurv::flexsurvspline(Surv(rectime, censrec) ~ hormon,
 mod_flex <- flexsurv::flexsurvspline(Surv(rectime, censrec) ~ hormon, 
                                      data = brcancer, k = 3)
 
-## ---- brcancer_plots-----------------------------------------------------
+## ---- brcancer_plots----------------------------------------------------------
 par(mfrow = c(1,2), cex = 0.85) # graphics parameters
 plot(mod_weib,
      main = "Weibull model",
@@ -69,7 +69,7 @@ plot(mod_flex,
      ylab = "Survival probability",
      xlab = "Time")
 
-## ---- define_logcumhaz---------------------------------------------------
+## ---- define_logcumhaz--------------------------------------------------------
 # Define a function returning the log cum hazard at time t
 logcumhaz <- function(t, x, betas, knots) {
   
@@ -91,7 +91,7 @@ logcumhaz <- function(t, x, betas, knots) {
   res
 }
 
-## ---- example2-----------------------------------------------------------
+## ---- example2----------------------------------------------------------------
 # Fit the model to the brcancer dataset to obtain the "true"
 # parameter values that will be used in our simulation study
 true_mod <- flexsurv::flexsurvspline(Surv(rectime, censrec) ~ hormon, 
@@ -140,22 +140,22 @@ set.seed(543543)
 # Perform the simulation study using 100 replicates
 rowMeans(replicate(100, sim_run(true_mod = true_mod)))
 
-## ---- tdeexample_sim-----------------------------------------------------
+## ---- tdeexample_sim----------------------------------------------------------
 covs <- data.frame(id = 1:5000, trt = rbinom(5000, 1, 0.5))
 simdat <- simsurv(dist = "weibull", lambdas = 0.1, gammas = 1.5, betas = c(trt = -0.5),
                   x = covs, tde = c(trt = 0.15), tdefunction = "log", maxt = 5)
 simdat <- merge(simdat, covs)
 head(simdat)
 
-## ---- tdeexample_mod1----------------------------------------------------
+## ---- tdeexample_mod1---------------------------------------------------------
 mod_tvc <- rstpm2::stpm2(Surv(eventtime, status) ~ trt, 
                          data = simdat, tvc = list(trt = 1))
 
-## ---- tdeexample_mod2----------------------------------------------------
+## ---- tdeexample_mod2---------------------------------------------------------
 mod_ph <- rstpm2::stpm2(Surv(eventtime, status) ~ trt, 
                         data = simdat)
 
-## ---- tdeexample_plothr--------------------------------------------------
+## ---- tdeexample_plothr-------------------------------------------------------
 plot(mod_tvc, newdata = data.frame(trt = 0), type = "hr", 
      var = "trt", ylim = c(0,1), ci = TRUE, rug = FALSE,
      main = "Time dependent hazard ratio",
@@ -163,7 +163,7 @@ plot(mod_tvc, newdata = data.frame(trt = 0), type = "hr",
 plot(mod_ph,  newdata = data.frame(trt = 0), type = "hr", 
      var = "trt", ylim = c(0,1), add = TRUE, ci = FALSE, lty = 2)
 
-## ---- jmexample_define_hazard--------------------------------------------
+## ---- jmexample_define_hazard-------------------------------------------------
 # First we define the hazard function to pass to simsurv
 # (NB this is a Weibull proportional hazards regression submodel
 # from a joint longitudinal and survival model with a "current
@@ -182,7 +182,7 @@ haz <- function(t, x, betas, ...) {
   )
 }
 
-## ---- jmexample_pars_and_covs--------------------------------------------
+## ---- jmexample_pars_and_covs-------------------------------------------------
 # Then we construct data frames with the true parameter
 # values and the covariate data for each individual
 set.seed(5454) # set seed before simulating data
@@ -217,7 +217,7 @@ covdat <- data.frame(
   x2 = stats::rnorm(N, 44, 8.5)   # a continuous covariate
 )
 
-## ---- jmexample_sim------------------------------------------------------
+## ---- jmexample_sim-----------------------------------------------------------
 # Set seed for simulations
 set.seed(546546)
 
@@ -225,7 +225,7 @@ set.seed(546546)
 # hazard function, covariates data, and true parameter values
 times <- simsurv(hazard = haz, x = covdat, betas = betas, maxt = 10)
 
-## ---- jmexample_view_data------------------------------------------------
+## ---- jmexample_view_data-----------------------------------------------------
 head(times)
 ## id eventtime status
 ##  1  4.813339      1

@@ -1,7 +1,25 @@
-### simsurv 0.2.3-9000 (X/X/2019) 
+### simsurv 1.0.0 (9/1/2021)
  
-Current development version
+#### New features
+   * Version number bumped to 1.0.0 to correspond to publication of JSS paper.
+
+---
+
+### simsurv 0.2.5 (22/2/2019)
  
+#### Bug fixes
+   * Fix bug where infinite survival time were incorrectly returned as NaN (due to: Inf * d = NaN when d = 0 is for a censored individual)
+
+---
+
+### simsurv 0.2.4 (6/2/2019)
+
+#### New features
+   * Allow negative shape parameters for the Gompertz distribution (note that this can lead to infinite survival times, in which case the survival time is set to 'Inf' and a warning is printed).
+
+#### Bug fixes
+   * The simsurv() function documentation and the technical vignette have been updated to better clarify the parameterisations for the parametric distributions.
+	 
 ---
 
 ### simsurv 0.2.3 (1/2/2019)

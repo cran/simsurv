@@ -1,60 +1,104 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <meta name="author" content="Sam Brilleman" />
 
-<meta name="date" content="2019-02-01" />
+<meta name="date" content="2021-01-10" />
 
 <title>How to use the simsurv package</title>
 
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 
 </style>
 <script>
@@ -70,7 +114,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -81,7 +125,190 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
 
 </head>
 
@@ -91,8 +318,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <h1 class="title toc-ignore">How to use the simsurv package</h1>
-<h4 class="author"><em>Sam Brilleman</em></h4>
-<h4 class="date"><em>2019-02-01</em></h4>
+<h4 class="author">Sam Brilleman</h4>
+<h4 class="date">2021-01-10</h4>
 
 
 <div id="TOC">
@@ -131,51 +358,51 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>calculating mean bias and mean coverage (of the estimated treatment effect) across the 100 simulated datasets.</li>
 </ul>
 <p>The code for performing the simulation study and the results are shown below.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Define a function for analysing one simulated dataset</span>
-sim_run &lt;-<span class="st"> </span><span class="cf">function</span>() {
-  <span class="co"># Create a data frame with the subject IDs and treatment covariate</span>
-  cov &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">200</span>,
-                    <span class="dt">trt =</span> <span class="kw">rbinom</span>(<span class="dv">200</span>, <span class="dv">1</span>, <span class="fl">0.5</span>))
-  
-  <span class="co"># Simulate the event times</span>
-  dat &lt;-<span class="st"> </span><span class="kw">simsurv</span>(<span class="dt">lambdas =</span> <span class="fl">0.1</span>, 
-                 <span class="dt">gammas =</span> <span class="fl">1.5</span>, 
-                 <span class="dt">betas =</span> <span class="kw">c</span>(<span class="dt">trt =</span> <span class="op">-</span><span class="fl">0.5</span>), 
-                 <span class="dt">x =</span> cov, 
-                 <span class="dt">maxt =</span> <span class="dv">5</span>)
-  
-  <span class="co"># Merge the simulated event times onto covariate data frame</span>
-  dat &lt;-<span class="st"> </span><span class="kw">merge</span>(cov, dat)
-  
-  <span class="co"># Fit a Weibull proportional hazards model</span>
-  mod &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw">flexsurvspline</span>(<span class="kw">Surv</span>(eventtime, status) <span class="op">~</span><span class="st"> </span>trt, <span class="dt">data =</span> dat)
-  
-  <span class="co"># Obtain estimates, standard errors and 95% CI limits</span>
-  est &lt;-<span class="st"> </span>mod<span class="op">$</span>coefficients[[<span class="st">&quot;trt&quot;</span>]]
-  ses &lt;-<span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">diag</span>(mod<span class="op">$</span>cov))[[<span class="st">&quot;trt&quot;</span>]]
-  cil &lt;-<span class="st"> </span>est <span class="op">+</span><span class="st"> </span><span class="kw">qnorm</span>(.<span class="dv">025</span>) <span class="op">*</span><span class="st"> </span>ses
-  ciu &lt;-<span class="st"> </span>est <span class="op">+</span><span class="st"> </span><span class="kw">qnorm</span>(.<span class="dv">975</span>) <span class="op">*</span><span class="st"> </span>ses
-  
-  <span class="co"># Return bias and coverage indicator for treatment effect</span>
-  <span class="kw">c</span>(<span class="dt">bias =</span> est <span class="op">-</span><span class="st"> </span>(<span class="op">-</span><span class="fl">0.5</span>), 
-    <span class="dt">coverage =</span> ((<span class="op">-</span><span class="fl">0.5</span> <span class="op">&gt;</span><span class="st"> </span>cil) <span class="op">&amp;&amp;</span><span class="st"> </span>(<span class="op">-</span><span class="fl">0.5</span> <span class="op">&lt;</span><span class="st"> </span>ciu)))
-}
-
-<span class="co"># Set seed for simulations</span>
-<span class="kw">set.seed</span>(<span class="dv">908070</span>)
-
-<span class="co"># Perform 100 replicates in simulation study</span>
-<span class="kw">rowMeans</span>(<span class="kw">replicate</span>(<span class="dv">100</span>, <span class="kw">sim_run</span>()))</code></pre></div>
-<pre><code>##        bias    coverage 
-## 0.005858079 0.930000000</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Define a function for analysing one simulated dataset</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>sim_run &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
+<span id="cb1-3"><a href="#cb1-3"></a>  <span class="co"># Create a data frame with the subject IDs and treatment covariate</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a>  cov &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">200</span>,</span>
+<span id="cb1-5"><a href="#cb1-5"></a>                    <span class="dt">trt =</span> <span class="kw">rbinom</span>(<span class="dv">200</span>, <span class="dv">1</span>, <span class="fl">0.5</span>))</span>
+<span id="cb1-6"><a href="#cb1-6"></a>  </span>
+<span id="cb1-7"><a href="#cb1-7"></a>  <span class="co"># Simulate the event times</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a>  dat &lt;-<span class="st"> </span><span class="kw">simsurv</span>(<span class="dt">lambdas =</span> <span class="fl">0.1</span>, </span>
+<span id="cb1-9"><a href="#cb1-9"></a>                 <span class="dt">gammas =</span> <span class="fl">1.5</span>, </span>
+<span id="cb1-10"><a href="#cb1-10"></a>                 <span class="dt">betas =</span> <span class="kw">c</span>(<span class="dt">trt =</span> <span class="fl">-0.5</span>), </span>
+<span id="cb1-11"><a href="#cb1-11"></a>                 <span class="dt">x =</span> cov, </span>
+<span id="cb1-12"><a href="#cb1-12"></a>                 <span class="dt">maxt =</span> <span class="dv">5</span>)</span>
+<span id="cb1-13"><a href="#cb1-13"></a>  </span>
+<span id="cb1-14"><a href="#cb1-14"></a>  <span class="co"># Merge the simulated event times onto covariate data frame</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a>  dat &lt;-<span class="st"> </span><span class="kw">merge</span>(cov, dat)</span>
+<span id="cb1-16"><a href="#cb1-16"></a>  </span>
+<span id="cb1-17"><a href="#cb1-17"></a>  <span class="co"># Fit a Weibull proportional hazards model</span></span>
+<span id="cb1-18"><a href="#cb1-18"></a>  mod &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw">flexsurvspline</span>(<span class="kw">Surv</span>(eventtime, status) <span class="op">~</span><span class="st"> </span>trt, <span class="dt">data =</span> dat)</span>
+<span id="cb1-19"><a href="#cb1-19"></a>  </span>
+<span id="cb1-20"><a href="#cb1-20"></a>  <span class="co"># Obtain estimates, standard errors and 95% CI limits</span></span>
+<span id="cb1-21"><a href="#cb1-21"></a>  est &lt;-<span class="st"> </span>mod<span class="op">$</span>coefficients[[<span class="st">&quot;trt&quot;</span>]]</span>
+<span id="cb1-22"><a href="#cb1-22"></a>  ses &lt;-<span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">diag</span>(mod<span class="op">$</span>cov))[[<span class="st">&quot;trt&quot;</span>]]</span>
+<span id="cb1-23"><a href="#cb1-23"></a>  cil &lt;-<span class="st"> </span>est <span class="op">+</span><span class="st"> </span><span class="kw">qnorm</span>(.<span class="dv">025</span>) <span class="op">*</span><span class="st"> </span>ses</span>
+<span id="cb1-24"><a href="#cb1-24"></a>  ciu &lt;-<span class="st"> </span>est <span class="op">+</span><span class="st"> </span><span class="kw">qnorm</span>(.<span class="dv">975</span>) <span class="op">*</span><span class="st"> </span>ses</span>
+<span id="cb1-25"><a href="#cb1-25"></a>  </span>
+<span id="cb1-26"><a href="#cb1-26"></a>  <span class="co"># Return bias and coverage indicator for treatment effect</span></span>
+<span id="cb1-27"><a href="#cb1-27"></a>  <span class="kw">c</span>(<span class="dt">bias =</span> est <span class="op">-</span><span class="st"> </span>(<span class="op">-</span><span class="fl">0.5</span>), </span>
+<span id="cb1-28"><a href="#cb1-28"></a>    <span class="dt">coverage =</span> ((<span class="op">-</span><span class="fl">0.5</span> <span class="op">&gt;</span><span class="st"> </span>cil) <span class="op">&amp;&amp;</span><span class="st"> </span>(<span class="op">-</span><span class="fl">0.5</span> <span class="op">&lt;</span><span class="st"> </span>ciu)))</span>
+<span id="cb1-29"><a href="#cb1-29"></a>}</span>
+<span id="cb1-30"><a href="#cb1-30"></a></span>
+<span id="cb1-31"><a href="#cb1-31"></a><span class="co"># Set seed for simulations</span></span>
+<span id="cb1-32"><a href="#cb1-32"></a><span class="kw">set.seed</span>(<span class="dv">908070</span>)</span>
+<span id="cb1-33"><a href="#cb1-33"></a></span>
+<span id="cb1-34"><a href="#cb1-34"></a><span class="co"># Perform 100 replicates in simulation study</span></span>
+<span id="cb1-35"><a href="#cb1-35"></a><span class="kw">rowMeans</span>(<span class="kw">replicate</span>(<span class="dv">100</span>, <span class="kw">sim_run</span>()))</span></code></pre></div>
+<pre><code>##       bias   coverage 
+## 0.02842414 0.90000000</code></pre>
 <p>Here we see that there is very little bias in the estimates of the log hazard ratio for the treatment effect, and the 95% confidence intervals are near their intended level of coverage.</p>
 </div>
 <div id="example-2-simulating-under-a-flexible-parametric-survival-model" class="section level3">
 <h3>Example 2: Simulating under a flexible parametric survival model</h3>
 <p>Next, we will simulate event times under a slightly more complex parametric survival model that incorporates a flexible baseline hazard.</p>
 <p>In this example we will use the publically accessible German breast cancer dataset. This dataset is included with the <strong>simsurv</strong> R package (see <code>help(simsurv::brcancer)</code> for a description of the dataset). Let us look at the first few rows of the dataset:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;brcancer&quot;</span>)
-<span class="kw">head</span>(brcancer)</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">data</span>(<span class="st">&quot;brcancer&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">head</span>(brcancer)</span></code></pre></div>
 <pre><code>##   id hormon rectime censrec
 ## 1  1      0    1814       1
 ## 2  2      1    2018       1
@@ -190,24 +417,24 @@ sim_run &lt;-<span class="st"> </span><span class="cf">function</span>() {
 </ul>
 <p>The flexible parametric survival model will be based on the method of Royston and Parmar (2002); i.e. restricted cubic splines are used to approximate the log cumulative baseline hazard. This model can be estimated using the <code>flexsurvspline</code> function from the <strong>flexsurv</strong> package (Jackson (2016)).</p>
 <p>We will use three internal knots (i.e. four degrees of freedom) for the restricted cubic splines with the knot points placed at evenly spaced percentiles of the distribution of observed event time (obtained by specifying the argument <code>k = 3</code> in the code below). We can also estimate the Weibull proportional hazards model using the <code>flexsurvspline</code> function from the <strong>flexsurv</strong> package, by specifying no internal knots (i.e. specifying <code>k = 0</code>).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Fit the Weibull survival model</span>
-mod_weib &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw">flexsurvspline</span>(<span class="kw">Surv</span>(rectime, censrec) <span class="op">~</span><span class="st"> </span>hormon, 
-                                     <span class="dt">data =</span> brcancer, <span class="dt">k =</span> <span class="dv">0</span>)
-
-<span class="co"># Fit the flexible parametric survival model</span>
-mod_flex &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw">flexsurvspline</span>(<span class="kw">Surv</span>(rectime, censrec) <span class="op">~</span><span class="st"> </span>hormon, 
-                                     <span class="dt">data =</span> brcancer, <span class="dt">k =</span> <span class="dv">3</span>)</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Fit the Weibull survival model</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>mod_weib &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw">flexsurvspline</span>(<span class="kw">Surv</span>(rectime, censrec) <span class="op">~</span><span class="st"> </span>hormon, </span>
+<span id="cb5-3"><a href="#cb5-3"></a>                                     <span class="dt">data =</span> brcancer, <span class="dt">k =</span> <span class="dv">0</span>)</span>
+<span id="cb5-4"><a href="#cb5-4"></a></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co"># Fit the flexible parametric survival model</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a>mod_flex &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw">flexsurvspline</span>(<span class="kw">Surv</span>(rectime, censrec) <span class="op">~</span><span class="st"> </span>hormon, </span>
+<span id="cb5-7"><a href="#cb5-7"></a>                                     <span class="dt">data =</span> brcancer, <span class="dt">k =</span> <span class="dv">3</span>)</span></code></pre></div>
 <p>Now let us compare the fit of the two models by plotting each of the fitted survival functions on top of the Kaplan-Meier survival curve.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="dt">cex =</span> <span class="fl">0.85</span>) <span class="co"># graphics parameters</span>
-<span class="kw">plot</span>(mod_weib,
-     <span class="dt">main =</span> <span class="st">&quot;Weibull model&quot;</span>,
-     <span class="dt">ylab =</span> <span class="st">&quot;Survival probability&quot;</span>,
-     <span class="dt">xlab =</span> <span class="st">&quot;Time&quot;</span>) 
-<span class="kw">plot</span>(mod_flex,
-     <span class="dt">main =</span> <span class="st">&quot;Flexible parametric model&quot;</span>,
-     <span class="dt">ylab =</span> <span class="st">&quot;Survival probability&quot;</span>,
-     <span class="dt">xlab =</span> <span class="st">&quot;Time&quot;</span>)</code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="dt">cex =</span> <span class="fl">0.85</span>) <span class="co"># graphics parameters</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">plot</span>(mod_weib,</span>
+<span id="cb6-3"><a href="#cb6-3"></a>     <span class="dt">main =</span> <span class="st">&quot;Weibull model&quot;</span>,</span>
+<span id="cb6-4"><a href="#cb6-4"></a>     <span class="dt">ylab =</span> <span class="st">&quot;Survival probability&quot;</span>,</span>
+<span id="cb6-5"><a href="#cb6-5"></a>     <span class="dt">xlab =</span> <span class="st">&quot;Time&quot;</span>) </span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="kw">plot</span>(mod_flex,</span>
+<span id="cb6-7"><a href="#cb6-7"></a>     <span class="dt">main =</span> <span class="st">&quot;Flexible parametric model&quot;</span>,</span>
+<span id="cb6-8"><a href="#cb6-8"></a>     <span class="dt">ylab =</span> <span class="st">&quot;Survival probability&quot;</span>,</span>
+<span id="cb6-9"><a href="#cb6-9"></a>     <span class="dt">xlab =</span> <span class="st">&quot;Time&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
 <p>There is evidence in the plots that the flexible parametric model fits the data better than the standard Weibull model. Therefore, if we wanted to simulate event times from a data generating process similar to that of the breast cancer data, then using a Weibull distribution may not be adequate. Rather, it would be more appropriate to simulate event times under the flexible parametric model. We will demonstrate how the <strong>simsurv</strong> package can be used to do this. The estimated parameters from the flexible parametric model will be used as the “true” parameters for the simulated event times.</p>
 <p>The event times can be generated under a user-specified log cumulative hazard function that is equivalent to the Royston and Parmar specification used by the <strong>flexsurv</strong> package. First, the log cumulative hazard function for this model needs to be defined as a function in the R session. The <strong>user-defined function passed to <code>simsurv</code> must always have the following three arguments:</strong></p>
 <ul>
@@ -216,81 +443,81 @@ mod_flex &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span c
 <li><code>betas</code>: a named list with the “true” parameters</li>
 </ul>
 <p>Each of these arguments provide information that is used in evaluating the hazard <span class="math inline">\(h_i(t)\)</span>, log hazard <span class="math inline">\(\log h_i(t)\)</span>, cumulative hazard <span class="math inline">\(H_i(t)\)</span>, or log cumulative hazard <span class="math inline">\(\log H_i(t)\)</span> (depending on which type of user-specified function is being provided). These three arguments (<code>t</code>, <code>x</code>, <code>betas</code>) can then be followed in the function signature by any additional arguments that may be necessary. For example, in the function definition below, the first three arguments are followed by an additional argument <code>knots</code>, which allows the calculation of the log cumulative hazard at time <span class="math inline">\(t\)</span> to depend on the knot locations for the splines.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Define a function returning the log cum hazard at time t</span>
-logcumhaz &lt;-<span class="st"> </span><span class="cf">function</span>(t, x, betas, knots) {
-  
-  <span class="co"># Obtain the basis terms for the spline-based log</span>
-  <span class="co"># cumulative hazard (evaluated at time t)</span>
-  basis &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw">basis</span>(knots, <span class="kw">log</span>(t))
-  
-  <span class="co"># Evaluate the log cumulative hazard under the</span>
-  <span class="co"># Royston and Parmar specification</span>
-  res &lt;-<span class="st"> </span>
-<span class="st">    </span>betas[[<span class="st">&quot;gamma0&quot;</span>]] <span class="op">*</span><span class="st"> </span>basis[[<span class="dv">1</span>]] <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span>betas[[<span class="st">&quot;gamma1&quot;</span>]] <span class="op">*</span><span class="st"> </span>basis[[<span class="dv">2</span>]] <span class="op">+</span>
-<span class="st">    </span>betas[[<span class="st">&quot;gamma2&quot;</span>]] <span class="op">*</span><span class="st"> </span>basis[[<span class="dv">3</span>]] <span class="op">+</span>
-<span class="st">    </span>betas[[<span class="st">&quot;gamma3&quot;</span>]] <span class="op">*</span><span class="st"> </span>basis[[<span class="dv">4</span>]] <span class="op">+</span>
-<span class="st">    </span>betas[[<span class="st">&quot;gamma4&quot;</span>]] <span class="op">*</span><span class="st"> </span>basis[[<span class="dv">5</span>]] <span class="op">+</span>
-<span class="st">    </span>betas[[<span class="st">&quot;hormon&quot;</span>]] <span class="op">*</span><span class="st"> </span>x[[<span class="st">&quot;hormon&quot;</span>]]
-  
-  <span class="co"># Return the log cumulative hazard at time t</span>
-  res
-}</code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Define a function returning the log cum hazard at time t</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>logcumhaz &lt;-<span class="st"> </span><span class="cf">function</span>(t, x, betas, knots) {</span>
+<span id="cb7-3"><a href="#cb7-3"></a>  </span>
+<span id="cb7-4"><a href="#cb7-4"></a>  <span class="co"># Obtain the basis terms for the spline-based log</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a>  <span class="co"># cumulative hazard (evaluated at time t)</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a>  basis &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw">basis</span>(knots, <span class="kw">log</span>(t))</span>
+<span id="cb7-7"><a href="#cb7-7"></a>  </span>
+<span id="cb7-8"><a href="#cb7-8"></a>  <span class="co"># Evaluate the log cumulative hazard under the</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a>  <span class="co"># Royston and Parmar specification</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a>  res &lt;-<span class="st"> </span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="st">    </span>betas[[<span class="st">&quot;gamma0&quot;</span>]] <span class="op">*</span><span class="st"> </span>basis[[<span class="dv">1</span>]] <span class="op">+</span><span class="st"> </span></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="st">    </span>betas[[<span class="st">&quot;gamma1&quot;</span>]] <span class="op">*</span><span class="st"> </span>basis[[<span class="dv">2</span>]] <span class="op">+</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="st">    </span>betas[[<span class="st">&quot;gamma2&quot;</span>]] <span class="op">*</span><span class="st"> </span>basis[[<span class="dv">3</span>]] <span class="op">+</span></span>
+<span id="cb7-14"><a href="#cb7-14"></a><span class="st">    </span>betas[[<span class="st">&quot;gamma3&quot;</span>]] <span class="op">*</span><span class="st"> </span>basis[[<span class="dv">4</span>]] <span class="op">+</span></span>
+<span id="cb7-15"><a href="#cb7-15"></a><span class="st">    </span>betas[[<span class="st">&quot;gamma4&quot;</span>]] <span class="op">*</span><span class="st"> </span>basis[[<span class="dv">5</span>]] <span class="op">+</span></span>
+<span id="cb7-16"><a href="#cb7-16"></a><span class="st">    </span>betas[[<span class="st">&quot;hormon&quot;</span>]] <span class="op">*</span><span class="st"> </span>x[[<span class="st">&quot;hormon&quot;</span>]]</span>
+<span id="cb7-17"><a href="#cb7-17"></a>  </span>
+<span id="cb7-18"><a href="#cb7-18"></a>  <span class="co"># Return the log cumulative hazard at time t</span></span>
+<span id="cb7-19"><a href="#cb7-19"></a>  res</span>
+<span id="cb7-20"><a href="#cb7-20"></a>}</span></code></pre></div>
 <p>Next, we will show how to use the <code>simsurv</code> function to simulate event times under the flexible parametric model. To demonstrate this, we will again generate the event times as part of a simulation study. The objective of the simulation study will be to assess the bias and coverage of the estimated log hazard ratio for hormone therapy. This will be achieved by:</p>
 <ul>
 <li>generating 100 simulated datasets (ideally it should be more than 100 datasets, but we don’t want the vignette to take forever to build!), each containing <span class="math inline">\(N = 200\)</span> individuals. The simulated event times will be generated under our flexible parametric model (with the “true” parameter values taken from fitting a model to the German breast cancer data);</li>
 <li>fitting both a Weibull model and a flexible parametric model to each simulated dataset;</li>
 <li>calculating the mean bias (across the 100 simulated datasets) in the log hazard ratio for hormone therapy under the Weibull model and the flexible parametric models.</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Fit the model to the brcancer dataset to obtain the &quot;true&quot;</span>
-<span class="co"># parameter values that will be used in our simulation study</span>
-true_mod &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw">flexsurvspline</span>(<span class="kw">Surv</span>(rectime, censrec) <span class="op">~</span><span class="st"> </span>hormon, 
-                                     <span class="dt">data =</span> brcancer, <span class="dt">k =</span> <span class="dv">3</span>)
-
-<span class="co"># Define a function to generate one simulated dataset, fit</span>
-<span class="co"># our two models (Weibull and flexible) to the simulated data</span>
-<span class="co"># and then return the bias in the estimated effect of hormone</span>
-<span class="co"># therapy under each fitted model</span>
-sim_run &lt;-<span class="st"> </span><span class="cf">function</span>(true_mod) {
-  <span class="co"># Create a data frame with the subject IDs and treatment covariate</span>
-  cov &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">200</span>, <span class="dt">hormon =</span> <span class="kw">rbinom</span>(<span class="dv">200</span>, <span class="dv">1</span>, <span class="fl">0.5</span>))
-
-  <span class="co"># Simulate the event times</span>
-  dat &lt;-<span class="st"> </span><span class="kw">simsurv</span>(<span class="dt">betas =</span> true_mod<span class="op">$</span>coefficients, <span class="co"># &quot;true&quot; parameter values</span>
-                 <span class="dt">x =</span> cov,                   <span class="co"># covariate data for 200 individuals</span>
-                 <span class="dt">knots =</span> true_mod<span class="op">$</span>knots,    <span class="co"># knot locations for splines</span>
-                 <span class="dt">logcumhazard =</span> logcumhaz,  <span class="co"># definition of log cum hazard</span>
-                 <span class="dt">maxt =</span> <span class="ot">NULL</span>,               <span class="co"># no right-censoring</span>
-                 <span class="dt">interval =</span> <span class="kw">c</span>(<span class="fl">1E-8</span>,<span class="dv">100000</span>)) <span class="co"># interval for root finding</span>
-  
-  <span class="co"># Merge the simulated event times onto covariate data frame</span>
-  dat &lt;-<span class="st"> </span><span class="kw">merge</span>(cov, dat)
-
-  <span class="co"># Fit a Weibull proportional hazards model</span>
-  weib_mod &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw">flexsurvspline</span>(<span class="kw">Surv</span>(eventtime, status) <span class="op">~</span><span class="st"> </span>hormon, 
-                                       <span class="dt">data =</span> dat, <span class="dt">k =</span> <span class="dv">0</span>)
-
-  <span class="co"># Fit a flexible parametric proportional hazards model</span>
-  flex_mod &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw">flexsurvspline</span>(<span class="kw">Surv</span>(eventtime, status) <span class="op">~</span><span class="st"> </span>hormon, 
-                                       <span class="dt">data =</span> dat, <span class="dt">k =</span> <span class="dv">3</span>)
-  
-  <span class="co"># Obtain estimates, standard errors and 95% CI limits for hormone effect</span>
-  true_loghr &lt;-<span class="st"> </span>true_mod<span class="op">$</span>coefficients[[<span class="st">&quot;hormon&quot;</span>]]
-  weib_loghr &lt;-<span class="st"> </span>weib_mod<span class="op">$</span>coefficients[[<span class="st">&quot;hormon&quot;</span>]]
-  flex_loghr &lt;-<span class="st"> </span>flex_mod<span class="op">$</span>coefficients[[<span class="st">&quot;hormon&quot;</span>]]
- 
-  <span class="co"># Return bias and coverage indicator for hormone effect</span>
-  <span class="kw">c</span>(<span class="dt">weib_bias =</span> weib_loghr <span class="op">-</span><span class="st"> </span>true_loghr, 
-    <span class="dt">flex_bias =</span> flex_loghr <span class="op">-</span><span class="st"> </span>true_loghr)
-}
-
-<span class="co"># Set a seed for the simulations</span>
-<span class="kw">set.seed</span>(<span class="dv">543543</span>)
-
-<span class="co"># Perform the simulation study using 100 replicates</span>
-<span class="kw">rowMeans</span>(<span class="kw">replicate</span>(<span class="dv">100</span>, <span class="kw">sim_run</span>(<span class="dt">true_mod =</span> true_mod)))</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Fit the model to the brcancer dataset to obtain the &quot;true&quot;</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="co"># parameter values that will be used in our simulation study</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>true_mod &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw">flexsurvspline</span>(<span class="kw">Surv</span>(rectime, censrec) <span class="op">~</span><span class="st"> </span>hormon, </span>
+<span id="cb8-4"><a href="#cb8-4"></a>                                     <span class="dt">data =</span> brcancer, <span class="dt">k =</span> <span class="dv">3</span>)</span>
+<span id="cb8-5"><a href="#cb8-5"></a></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co"># Define a function to generate one simulated dataset, fit</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co"># our two models (Weibull and flexible) to the simulated data</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co"># and then return the bias in the estimated effect of hormone</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co"># therapy under each fitted model</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a>sim_run &lt;-<span class="st"> </span><span class="cf">function</span>(true_mod) {</span>
+<span id="cb8-11"><a href="#cb8-11"></a>  <span class="co"># Create a data frame with the subject IDs and treatment covariate</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a>  cov &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">200</span>, <span class="dt">hormon =</span> <span class="kw">rbinom</span>(<span class="dv">200</span>, <span class="dv">1</span>, <span class="fl">0.5</span>))</span>
+<span id="cb8-13"><a href="#cb8-13"></a></span>
+<span id="cb8-14"><a href="#cb8-14"></a>  <span class="co"># Simulate the event times</span></span>
+<span id="cb8-15"><a href="#cb8-15"></a>  dat &lt;-<span class="st"> </span><span class="kw">simsurv</span>(<span class="dt">betas =</span> true_mod<span class="op">$</span>coefficients, <span class="co"># &quot;true&quot; parameter values</span></span>
+<span id="cb8-16"><a href="#cb8-16"></a>                 <span class="dt">x =</span> cov,                   <span class="co"># covariate data for 200 individuals</span></span>
+<span id="cb8-17"><a href="#cb8-17"></a>                 <span class="dt">knots =</span> true_mod<span class="op">$</span>knots,    <span class="co"># knot locations for splines</span></span>
+<span id="cb8-18"><a href="#cb8-18"></a>                 <span class="dt">logcumhazard =</span> logcumhaz,  <span class="co"># definition of log cum hazard</span></span>
+<span id="cb8-19"><a href="#cb8-19"></a>                 <span class="dt">maxt =</span> <span class="ot">NULL</span>,               <span class="co"># no right-censoring</span></span>
+<span id="cb8-20"><a href="#cb8-20"></a>                 <span class="dt">interval =</span> <span class="kw">c</span>(<span class="fl">1E-8</span>,<span class="dv">100000</span>)) <span class="co"># interval for root finding</span></span>
+<span id="cb8-21"><a href="#cb8-21"></a>  </span>
+<span id="cb8-22"><a href="#cb8-22"></a>  <span class="co"># Merge the simulated event times onto covariate data frame</span></span>
+<span id="cb8-23"><a href="#cb8-23"></a>  dat &lt;-<span class="st"> </span><span class="kw">merge</span>(cov, dat)</span>
+<span id="cb8-24"><a href="#cb8-24"></a></span>
+<span id="cb8-25"><a href="#cb8-25"></a>  <span class="co"># Fit a Weibull proportional hazards model</span></span>
+<span id="cb8-26"><a href="#cb8-26"></a>  weib_mod &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw">flexsurvspline</span>(<span class="kw">Surv</span>(eventtime, status) <span class="op">~</span><span class="st"> </span>hormon, </span>
+<span id="cb8-27"><a href="#cb8-27"></a>                                       <span class="dt">data =</span> dat, <span class="dt">k =</span> <span class="dv">0</span>)</span>
+<span id="cb8-28"><a href="#cb8-28"></a></span>
+<span id="cb8-29"><a href="#cb8-29"></a>  <span class="co"># Fit a flexible parametric proportional hazards model</span></span>
+<span id="cb8-30"><a href="#cb8-30"></a>  flex_mod &lt;-<span class="st"> </span>flexsurv<span class="op">::</span><span class="kw">flexsurvspline</span>(<span class="kw">Surv</span>(eventtime, status) <span class="op">~</span><span class="st"> </span>hormon, </span>
+<span id="cb8-31"><a href="#cb8-31"></a>                                       <span class="dt">data =</span> dat, <span class="dt">k =</span> <span class="dv">3</span>)</span>
+<span id="cb8-32"><a href="#cb8-32"></a>  </span>
+<span id="cb8-33"><a href="#cb8-33"></a>  <span class="co"># Obtain estimates, standard errors and 95% CI limits for hormone effect</span></span>
+<span id="cb8-34"><a href="#cb8-34"></a>  true_loghr &lt;-<span class="st"> </span>true_mod<span class="op">$</span>coefficients[[<span class="st">&quot;hormon&quot;</span>]]</span>
+<span id="cb8-35"><a href="#cb8-35"></a>  weib_loghr &lt;-<span class="st"> </span>weib_mod<span class="op">$</span>coefficients[[<span class="st">&quot;hormon&quot;</span>]]</span>
+<span id="cb8-36"><a href="#cb8-36"></a>  flex_loghr &lt;-<span class="st"> </span>flex_mod<span class="op">$</span>coefficients[[<span class="st">&quot;hormon&quot;</span>]]</span>
+<span id="cb8-37"><a href="#cb8-37"></a> </span>
+<span id="cb8-38"><a href="#cb8-38"></a>  <span class="co"># Return bias and coverage indicator for hormone effect</span></span>
+<span id="cb8-39"><a href="#cb8-39"></a>  <span class="kw">c</span>(<span class="dt">weib_bias =</span> weib_loghr <span class="op">-</span><span class="st"> </span>true_loghr, </span>
+<span id="cb8-40"><a href="#cb8-40"></a>    <span class="dt">flex_bias =</span> flex_loghr <span class="op">-</span><span class="st"> </span>true_loghr)</span>
+<span id="cb8-41"><a href="#cb8-41"></a>}</span>
+<span id="cb8-42"><a href="#cb8-42"></a></span>
+<span id="cb8-43"><a href="#cb8-43"></a><span class="co"># Set a seed for the simulations</span></span>
+<span id="cb8-44"><a href="#cb8-44"></a><span class="kw">set.seed</span>(<span class="dv">543543</span>)</span>
+<span id="cb8-45"><a href="#cb8-45"></a></span>
+<span id="cb8-46"><a href="#cb8-46"></a><span class="co"># Perform the simulation study using 100 replicates</span></span>
+<span id="cb8-47"><a href="#cb8-47"></a><span class="kw">rowMeans</span>(<span class="kw">replicate</span>(<span class="dv">100</span>, <span class="kw">sim_run</span>(<span class="dt">true_mod =</span> true_mod)))</span></code></pre></div>
 <pre><code>##    weib_bias    flex_bias 
-## -0.013141112  0.007088905</code></pre>
+## -0.029244642 -0.008417815</code></pre>
 </div>
 <div id="example-3-simulating-under-a-weibull-model-with-time-dependent-effects" class="section level3">
 <h3>Example 3: Simulating under a Weibull model with time-dependent effects</h3>
@@ -306,34 +533,34 @@ sim_run &lt;-<span class="st"> </span><span class="cf">function</span>(true_mod)
 <li><span class="math inline">\(\lambda = 0.1\)</span></li>
 <li><span class="math inline">\(\gamma = 1.5\)</span></li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">covs &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5000</span>, <span class="dt">trt =</span> <span class="kw">rbinom</span>(<span class="dv">5000</span>, <span class="dv">1</span>, <span class="fl">0.5</span>))
-simdat &lt;-<span class="st"> </span><span class="kw">simsurv</span>(<span class="dt">dist =</span> <span class="st">&quot;weibull&quot;</span>, <span class="dt">lambdas =</span> <span class="fl">0.1</span>, <span class="dt">gammas =</span> <span class="fl">1.5</span>, <span class="dt">betas =</span> <span class="kw">c</span>(<span class="dt">trt =</span> <span class="op">-</span><span class="fl">0.5</span>),
-                  <span class="dt">x =</span> covs, <span class="dt">tde =</span> <span class="kw">c</span>(<span class="dt">trt =</span> <span class="fl">0.15</span>), <span class="dt">tdefunction =</span> <span class="st">&quot;log&quot;</span>, <span class="dt">maxt =</span> <span class="dv">5</span>)
-simdat &lt;-<span class="st"> </span><span class="kw">merge</span>(simdat, covs)
-<span class="kw">head</span>(simdat)</code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>covs &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5000</span>, <span class="dt">trt =</span> <span class="kw">rbinom</span>(<span class="dv">5000</span>, <span class="dv">1</span>, <span class="fl">0.5</span>))</span>
+<span id="cb10-2"><a href="#cb10-2"></a>simdat &lt;-<span class="st"> </span><span class="kw">simsurv</span>(<span class="dt">dist =</span> <span class="st">&quot;weibull&quot;</span>, <span class="dt">lambdas =</span> <span class="fl">0.1</span>, <span class="dt">gammas =</span> <span class="fl">1.5</span>, <span class="dt">betas =</span> <span class="kw">c</span>(<span class="dt">trt =</span> <span class="fl">-0.5</span>),</span>
+<span id="cb10-3"><a href="#cb10-3"></a>                  <span class="dt">x =</span> covs, <span class="dt">tde =</span> <span class="kw">c</span>(<span class="dt">trt =</span> <span class="fl">0.15</span>), <span class="dt">tdefunction =</span> <span class="st">&quot;log&quot;</span>, <span class="dt">maxt =</span> <span class="dv">5</span>)</span>
+<span id="cb10-4"><a href="#cb10-4"></a>simdat &lt;-<span class="st"> </span><span class="kw">merge</span>(simdat, covs)</span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="kw">head</span>(simdat)</span></code></pre></div>
 <pre><code>##   id eventtime status trt
-## 1  1  1.547773      1   0
-## 2  2  3.290926      1   1
-## 3  3  3.002973      1   0
-## 4  4  5.000000      0   0
-## 5  5  4.227833      1   0
-## 6  6  4.044087      1   0</code></pre>
+## 1  1  2.091009      1   1
+## 2  2  5.000000      0   1
+## 3  3  5.000000      0   1
+## 4  4  5.000000      0   1
+## 5  5  5.000000      0   1
+## 6  6  4.930287      1   0</code></pre>
 <p>Then let us fit a flexible parametric model with two internal knots (i.e. 3 degrees of freedom) for the baseline hazard, and a time-dependent hazard ratio for the treatment effect. For the time-dependent hazard ratio we will use an interaction with log time (the same as used in the data generating model); this can be easily achieved using the <code>stpm2</code> function from the <strong>rstpm2</strong> package (Clements and Liu (2017)) and specifying the <code>tvc</code> option. Note that the <strong>rstpm2</strong> package and <strong>flexsurv</strong> packages can both be used to fit the Royston and Parmar flexible parametric survival model, however, they differ slightly in their post-estimation functionality and other possible extensions. Here, we use the <strong>rstpm2</strong> package because it allows us to easily specify time-dependent effects and then plot the time-dependent hazard ratio after fitting the model (as shown in the code below).</p>
 <p>The model with the time-dependent effect for treatment can be estimated using the following code</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod_tvc &lt;-<span class="st"> </span>rstpm2<span class="op">::</span><span class="kw">stpm2</span>(<span class="kw">Surv</span>(eventtime, status) <span class="op">~</span><span class="st"> </span>trt, 
-                         <span class="dt">data =</span> simdat, <span class="dt">tvc =</span> <span class="kw">list</span>(<span class="dt">trt =</span> <span class="dv">1</span>))</code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>mod_tvc &lt;-<span class="st"> </span>rstpm2<span class="op">::</span><span class="kw">stpm2</span>(<span class="kw">Surv</span>(eventtime, status) <span class="op">~</span><span class="st"> </span>trt, </span>
+<span id="cb12-2"><a href="#cb12-2"></a>                         <span class="dt">data =</span> simdat, <span class="dt">tvc =</span> <span class="kw">list</span>(<span class="dt">trt =</span> <span class="dv">1</span>))</span></code></pre></div>
 <p>And for comparison we can fit the corresponding model, but without the time-dependent effect for treatment (i.e. assuming proportional hazards instead)</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod_ph &lt;-<span class="st"> </span>rstpm2<span class="op">::</span><span class="kw">stpm2</span>(<span class="kw">Surv</span>(eventtime, status) <span class="op">~</span><span class="st"> </span>trt, 
-                        <span class="dt">data =</span> simdat)</code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>mod_ph &lt;-<span class="st"> </span>rstpm2<span class="op">::</span><span class="kw">stpm2</span>(<span class="kw">Surv</span>(eventtime, status) <span class="op">~</span><span class="st"> </span>trt, </span>
+<span id="cb13-2"><a href="#cb13-2"></a>                        <span class="dt">data =</span> simdat)</span></code></pre></div>
 <p>Now, we can plot the time-dependent hazard ratio and the time-fixed hazard ratio on the same plot region using the following code</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(mod_tvc, <span class="dt">newdata =</span> <span class="kw">data.frame</span>(<span class="dt">trt =</span> <span class="dv">0</span>), <span class="dt">type =</span> <span class="st">&quot;hr&quot;</span>, 
-     <span class="dt">var =</span> <span class="st">&quot;trt&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">ci =</span> <span class="ot">TRUE</span>, <span class="dt">rug =</span> <span class="ot">FALSE</span>,
-     <span class="dt">main =</span> <span class="st">&quot;Time dependent hazard ratio&quot;</span>,
-     <span class="dt">ylab =</span> <span class="st">&quot;Hazard ratio&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Time&quot;</span>)
-<span class="kw">plot</span>(mod_ph,  <span class="dt">newdata =</span> <span class="kw">data.frame</span>(<span class="dt">trt =</span> <span class="dv">0</span>), <span class="dt">type =</span> <span class="st">&quot;hr&quot;</span>, 
-     <span class="dt">var =</span> <span class="st">&quot;trt&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">ci =</span> <span class="ot">FALSE</span>, <span class="dt">lty =</span> <span class="dv">2</span>)</code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
-<p>From the plot we can see the diminishing effect of treatment under the model with the time-dependent hazard ratio; as time increases the hazard ratio approaches a value of 1. Moreover, note that the hazard ratio is approximately equal to a value of 0.6 (i.e. <span class="math inline">\(\exp(-0.5)\)</span>) when <span class="math inline">\(t = 1\)</span>, which is what we specified in the data generating model.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">plot</span>(mod_tvc, <span class="dt">newdata =</span> <span class="kw">data.frame</span>(<span class="dt">trt =</span> <span class="dv">0</span>), <span class="dt">type =</span> <span class="st">&quot;hr&quot;</span>, </span>
+<span id="cb14-2"><a href="#cb14-2"></a>     <span class="dt">var =</span> <span class="st">&quot;trt&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">ci =</span> <span class="ot">TRUE</span>, <span class="dt">rug =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb14-3"><a href="#cb14-3"></a>     <span class="dt">main =</span> <span class="st">&quot;Time dependent hazard ratio&quot;</span>,</span>
+<span id="cb14-4"><a href="#cb14-4"></a>     <span class="dt">ylab =</span> <span class="st">&quot;Hazard ratio&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Time&quot;</span>)</span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="kw">plot</span>(mod_ph,  <span class="dt">newdata =</span> <span class="kw">data.frame</span>(<span class="dt">trt =</span> <span class="dv">0</span>), <span class="dt">type =</span> <span class="st">&quot;hr&quot;</span>, </span>
+<span id="cb14-6"><a href="#cb14-6"></a>     <span class="dt">var =</span> <span class="st">&quot;trt&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">add =</span> <span class="ot">TRUE</span>, <span class="dt">ci =</span> <span class="ot">FALSE</span>, <span class="dt">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>From the plot we can see the diminishing effect of treatment under the model with the time-dependent hazard ratio; as time increases the hazard ratio approaches a value of 1. Moreover, note that the hazard ratio is approximately equal to a value of 0.6 (i.e. <span class="math inline">\(\exp(-0.5)\)</span>) when <span class="math inline">\(t = 1\)</span>, which is what we specified in the data generating model.</p>
 </div>
 <div id="example-4-simulating-under-a-joint-model-for-longitudinal-and-survival-data" class="section level3">
 <h3>Example 4: Simulating under a joint model for longitudinal and survival data</h3>
@@ -349,81 +576,81 @@ simdat &lt;-<span class="st"> </span><span class="kw">merge</span>(simdat, covs)
 <p>where <span class="math inline">\(x_{1i}\)</span> is an indicator variable for a binary covariate, <span class="math inline">\(x_{2i}\)</span> is a continuous covariate, <span class="math inline">\(b_{0i}\)</span> and <span class="math inline">\(b_{1i}\)</span> are individual-level parameters (i.e. random effects) for the intercept and slope for individual <span class="math inline">\(i\)</span>, the <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\gamma\)</span> terms are population-level parameters (i.e. fixed effects), and <span class="math inline">\(\delta\)</span> is the shape parameter for the Weibull baseline hazard.</p>
 <p>This specification allows for an individual-specific linear trajectory for the longitudinal submodel, a Weibull baseline hazard in the event submodel, a current value association structure, and the effects of a binary and a continuous covariate in both the longitudinal and event submodels.</p>
 <p>To simulate from this model using <strong>simsurv</strong>, we need to first explicitly define the hazard function. The code defining a function that returns the hazard for this joint model is</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># First we define the hazard function to pass to simsurv</span>
-<span class="co"># (NB this is a Weibull proportional hazards regression submodel</span>
-<span class="co"># from a joint longitudinal and survival model with a &quot;current</span>
-<span class="co"># value&quot; association structure)</span>
-haz &lt;-<span class="st"> </span><span class="cf">function</span>(t, x, betas, ...) {
-  betas[[<span class="st">&quot;delta&quot;</span>]] <span class="op">*</span><span class="st"> </span>(t <span class="op">^</span><span class="st"> </span>(betas[[<span class="st">&quot;delta&quot;</span>]] <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)) <span class="op">*</span><span class="st"> </span><span class="kw">exp</span>(
-    betas[[<span class="st">&quot;gamma_0&quot;</span>]] <span class="op">+</span>
-<span class="st">    </span>betas[[<span class="st">&quot;gamma_1&quot;</span>]] <span class="op">*</span><span class="st"> </span>x[[<span class="st">&quot;x1&quot;</span>]] <span class="op">+</span>
-<span class="st">    </span>betas[[<span class="st">&quot;gamma_2&quot;</span>]] <span class="op">*</span><span class="st"> </span>x[[<span class="st">&quot;x2&quot;</span>]] <span class="op">+</span>
-<span class="st">    </span>betas[[<span class="st">&quot;alpha&quot;</span>]] <span class="op">*</span><span class="st"> </span>(
-      betas[[<span class="st">&quot;beta_0i&quot;</span>]] <span class="op">+</span>
-<span class="st">      </span>betas[[<span class="st">&quot;beta_1i&quot;</span>]] <span class="op">*</span><span class="st"> </span>t <span class="op">+</span>
-<span class="st">      </span>betas[[<span class="st">&quot;beta_2&quot;</span>]]  <span class="op">*</span><span class="st"> </span>x[[<span class="st">&quot;x1&quot;</span>]] <span class="op">+</span>
-<span class="st">      </span>betas[[<span class="st">&quot;beta_3&quot;</span>]]  <span class="op">*</span><span class="st"> </span>x[[<span class="st">&quot;x2&quot;</span>]]
-    )
-  )
-}</code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># First we define the hazard function to pass to simsurv</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="co"># (NB this is a Weibull proportional hazards regression submodel</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="co"># from a joint longitudinal and survival model with a &quot;current</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="co"># value&quot; association structure)</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a>haz &lt;-<span class="st"> </span><span class="cf">function</span>(t, x, betas, ...) {</span>
+<span id="cb15-6"><a href="#cb15-6"></a>  betas[[<span class="st">&quot;delta&quot;</span>]] <span class="op">*</span><span class="st"> </span>(t <span class="op">^</span><span class="st"> </span>(betas[[<span class="st">&quot;delta&quot;</span>]] <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)) <span class="op">*</span><span class="st"> </span><span class="kw">exp</span>(</span>
+<span id="cb15-7"><a href="#cb15-7"></a>    betas[[<span class="st">&quot;gamma_0&quot;</span>]] <span class="op">+</span></span>
+<span id="cb15-8"><a href="#cb15-8"></a><span class="st">    </span>betas[[<span class="st">&quot;gamma_1&quot;</span>]] <span class="op">*</span><span class="st"> </span>x[[<span class="st">&quot;x1&quot;</span>]] <span class="op">+</span></span>
+<span id="cb15-9"><a href="#cb15-9"></a><span class="st">    </span>betas[[<span class="st">&quot;gamma_2&quot;</span>]] <span class="op">*</span><span class="st"> </span>x[[<span class="st">&quot;x2&quot;</span>]] <span class="op">+</span></span>
+<span id="cb15-10"><a href="#cb15-10"></a><span class="st">    </span>betas[[<span class="st">&quot;alpha&quot;</span>]] <span class="op">*</span><span class="st"> </span>(</span>
+<span id="cb15-11"><a href="#cb15-11"></a>      betas[[<span class="st">&quot;beta_0i&quot;</span>]] <span class="op">+</span></span>
+<span id="cb15-12"><a href="#cb15-12"></a><span class="st">      </span>betas[[<span class="st">&quot;beta_1i&quot;</span>]] <span class="op">*</span><span class="st"> </span>t <span class="op">+</span></span>
+<span id="cb15-13"><a href="#cb15-13"></a><span class="st">      </span>betas[[<span class="st">&quot;beta_2&quot;</span>]]  <span class="op">*</span><span class="st"> </span>x[[<span class="st">&quot;x1&quot;</span>]] <span class="op">+</span></span>
+<span id="cb15-14"><a href="#cb15-14"></a><span class="st">      </span>betas[[<span class="st">&quot;beta_3&quot;</span>]]  <span class="op">*</span><span class="st"> </span>x[[<span class="st">&quot;x2&quot;</span>]]</span>
+<span id="cb15-15"><a href="#cb15-15"></a>    )</span>
+<span id="cb15-16"><a href="#cb15-16"></a>  )</span>
+<span id="cb15-17"><a href="#cb15-17"></a>}</span></code></pre></div>
 <p>The next step is to define the “true” parameter values and covariate data for each individual. This is achieved by specifying two data frames: one for the parameter values, and one for the covariate data. Each row of the data frame will correspond to a different individual. The R code to achieve this is</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Then we construct data frames with the true parameter</span>
-<span class="co"># values and the covariate data for each individual</span>
-<span class="kw">set.seed</span>(<span class="dv">5454</span>) <span class="co"># set seed before simulating data</span>
-N &lt;-<span class="st"> </span><span class="dv">200</span>       <span class="co"># number of individuals</span>
-
-<span class="co"># Population (fixed effect) parameters</span>
-betas &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
-  <span class="dt">delta   =</span> <span class="kw">rep</span>(<span class="dv">2</span>,    N),
-  <span class="dt">gamma_0 =</span> <span class="kw">rep</span>(<span class="op">-</span><span class="fl">11.9</span>,N),
-  <span class="dt">gamma_1 =</span> <span class="kw">rep</span>(<span class="fl">0.6</span>,  N),
-  <span class="dt">gamma_2 =</span> <span class="kw">rep</span>(<span class="fl">0.08</span>, N),
-  <span class="dt">alpha   =</span> <span class="kw">rep</span>(<span class="fl">0.03</span>, N),
-  <span class="dt">beta_0  =</span> <span class="kw">rep</span>(<span class="dv">90</span>,   N),
-  <span class="dt">beta_1  =</span> <span class="kw">rep</span>(<span class="fl">2.5</span>,  N),
-  <span class="dt">beta_2  =</span> <span class="kw">rep</span>(<span class="op">-</span><span class="fl">1.5</span>, N),
-  <span class="dt">beta_3  =</span> <span class="kw">rep</span>(<span class="dv">1</span>,    N)
-)
-
-<span class="co"># Individual-specific (random effect) parameters</span>
-b_corrmat &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="dv">1</span>), <span class="dv">2</span>, <span class="dv">2</span>)
-b_sds     &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">3</span>)
-b_means   &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">2</span>)
-b_z       &lt;-<span class="st"> </span>MASS<span class="op">::</span><span class="kw">mvrnorm</span>(<span class="dt">n =</span> N, <span class="dt">mu =</span> b_means, <span class="dt">Sigma =</span> b_corrmat)
-b         &lt;-<span class="st"> </span><span class="kw">sapply</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(b_sds), 
-                    <span class="dt">FUN =</span> <span class="cf">function</span>(x) b_sds[x] <span class="op">*</span><span class="st"> </span>b_z[,x])
-betas<span class="op">$</span>beta_0i &lt;-<span class="st"> </span>betas<span class="op">$</span>beta_<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>b[,<span class="dv">1</span>]
-betas<span class="op">$</span>beta_1i &lt;-<span class="st"> </span>betas<span class="op">$</span>beta_<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>b[,<span class="dv">2</span>]
-
-<span class="co"># Covariate data</span>
-covdat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
-  <span class="dt">x1 =</span> stats<span class="op">::</span><span class="kw">rbinom</span>(N, <span class="dv">1</span>, <span class="fl">0.45</span>), <span class="co"># a binary covariate</span>
-  <span class="dt">x2 =</span> stats<span class="op">::</span><span class="kw">rnorm</span>(N, <span class="dv">44</span>, <span class="fl">8.5</span>)   <span class="co"># a continuous covariate</span>
-)</code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="co"># Then we construct data frames with the true parameter</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="co"># values and the covariate data for each individual</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="kw">set.seed</span>(<span class="dv">5454</span>) <span class="co"># set seed before simulating data</span></span>
+<span id="cb16-4"><a href="#cb16-4"></a>N &lt;-<span class="st"> </span><span class="dv">200</span>       <span class="co"># number of individuals</span></span>
+<span id="cb16-5"><a href="#cb16-5"></a></span>
+<span id="cb16-6"><a href="#cb16-6"></a><span class="co"># Population (fixed effect) parameters</span></span>
+<span id="cb16-7"><a href="#cb16-7"></a>betas &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</span>
+<span id="cb16-8"><a href="#cb16-8"></a>  <span class="dt">delta   =</span> <span class="kw">rep</span>(<span class="dv">2</span>,    N),</span>
+<span id="cb16-9"><a href="#cb16-9"></a>  <span class="dt">gamma_0 =</span> <span class="kw">rep</span>(<span class="op">-</span><span class="fl">11.9</span>,N),</span>
+<span id="cb16-10"><a href="#cb16-10"></a>  <span class="dt">gamma_1 =</span> <span class="kw">rep</span>(<span class="fl">0.6</span>,  N),</span>
+<span id="cb16-11"><a href="#cb16-11"></a>  <span class="dt">gamma_2 =</span> <span class="kw">rep</span>(<span class="fl">0.08</span>, N),</span>
+<span id="cb16-12"><a href="#cb16-12"></a>  <span class="dt">alpha   =</span> <span class="kw">rep</span>(<span class="fl">0.03</span>, N),</span>
+<span id="cb16-13"><a href="#cb16-13"></a>  <span class="dt">beta_0  =</span> <span class="kw">rep</span>(<span class="dv">90</span>,   N),</span>
+<span id="cb16-14"><a href="#cb16-14"></a>  <span class="dt">beta_1  =</span> <span class="kw">rep</span>(<span class="fl">2.5</span>,  N),</span>
+<span id="cb16-15"><a href="#cb16-15"></a>  <span class="dt">beta_2  =</span> <span class="kw">rep</span>(<span class="op">-</span><span class="fl">1.5</span>, N),</span>
+<span id="cb16-16"><a href="#cb16-16"></a>  <span class="dt">beta_3  =</span> <span class="kw">rep</span>(<span class="dv">1</span>,    N)</span>
+<span id="cb16-17"><a href="#cb16-17"></a>)</span>
+<span id="cb16-18"><a href="#cb16-18"></a></span>
+<span id="cb16-19"><a href="#cb16-19"></a><span class="co"># Individual-specific (random effect) parameters</span></span>
+<span id="cb16-20"><a href="#cb16-20"></a>b_corrmat &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="dv">1</span>), <span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb16-21"><a href="#cb16-21"></a>b_sds     &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">3</span>)</span>
+<span id="cb16-22"><a href="#cb16-22"></a>b_means   &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">2</span>)</span>
+<span id="cb16-23"><a href="#cb16-23"></a>b_z       &lt;-<span class="st"> </span>MASS<span class="op">::</span><span class="kw">mvrnorm</span>(<span class="dt">n =</span> N, <span class="dt">mu =</span> b_means, <span class="dt">Sigma =</span> b_corrmat)</span>
+<span id="cb16-24"><a href="#cb16-24"></a>b         &lt;-<span class="st"> </span><span class="kw">sapply</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(b_sds), </span>
+<span id="cb16-25"><a href="#cb16-25"></a>                    <span class="dt">FUN =</span> <span class="cf">function</span>(x) b_sds[x] <span class="op">*</span><span class="st"> </span>b_z[,x])</span>
+<span id="cb16-26"><a href="#cb16-26"></a>betas<span class="op">$</span>beta_0i &lt;-<span class="st"> </span>betas<span class="op">$</span>beta_<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>b[,<span class="dv">1</span>]</span>
+<span id="cb16-27"><a href="#cb16-27"></a>betas<span class="op">$</span>beta_1i &lt;-<span class="st"> </span>betas<span class="op">$</span>beta_<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>b[,<span class="dv">2</span>]</span>
+<span id="cb16-28"><a href="#cb16-28"></a></span>
+<span id="cb16-29"><a href="#cb16-29"></a><span class="co"># Covariate data</span></span>
+<span id="cb16-30"><a href="#cb16-30"></a>covdat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</span>
+<span id="cb16-31"><a href="#cb16-31"></a>  <span class="dt">x1 =</span> stats<span class="op">::</span><span class="kw">rbinom</span>(N, <span class="dv">1</span>, <span class="fl">0.45</span>), <span class="co"># a binary covariate</span></span>
+<span id="cb16-32"><a href="#cb16-32"></a>  <span class="dt">x2 =</span> stats<span class="op">::</span><span class="kw">rnorm</span>(N, <span class="dv">44</span>, <span class="fl">8.5</span>)   <span class="co"># a continuous covariate</span></span>
+<span id="cb16-33"><a href="#cb16-33"></a>)</span></code></pre></div>
 <p>The final step is to then generate the simulated event times using a call to the <code>simsurv</code> function. The only arguments that need to be specified are the user-defined hazard function, the true parameter values, and the covariate data. In this example we will also specify a maximum follow up time of ten units (for example, ten years, after which individuals will be censored if they have not yet experienced the event).</p>
 <p>The code to generate the simulated event times is</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Set seed for simulations</span>
-<span class="kw">set.seed</span>(<span class="dv">546546</span>)
-
-<span class="co"># Then simulate the survival times based on the user-defined</span>
-<span class="co"># hazard function, covariates data, and true parameter values</span>
-times &lt;-<span class="st"> </span><span class="kw">simsurv</span>(<span class="dt">hazard =</span> haz, <span class="dt">x =</span> covdat, <span class="dt">betas =</span> betas, <span class="dt">maxt =</span> <span class="dv">10</span>)</code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># Set seed for simulations</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="kw">set.seed</span>(<span class="dv">546546</span>)</span>
+<span id="cb17-3"><a href="#cb17-3"></a></span>
+<span id="cb17-4"><a href="#cb17-4"></a><span class="co"># Then simulate the survival times based on the user-defined</span></span>
+<span id="cb17-5"><a href="#cb17-5"></a><span class="co"># hazard function, covariates data, and true parameter values</span></span>
+<span id="cb17-6"><a href="#cb17-6"></a>times &lt;-<span class="st"> </span><span class="kw">simsurv</span>(<span class="dt">hazard =</span> haz, <span class="dt">x =</span> covdat, <span class="dt">betas =</span> betas, <span class="dt">maxt =</span> <span class="dv">10</span>)</span></code></pre></div>
 <p>We can them examine the first few rows of the resulting data frame, to see the simulated event times and event indicator</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(times)</code></pre></div>
-<pre><code>##   id eventtime status
-## 1  1  7.676103      1
-## 2  2 10.000000      0
-## 3  3  1.142876      1
-## 4  4  2.429828      1
-## 5  5  6.901247      1
-## 6  6  7.748474      1</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## id eventtime status
-##  1  4.813339      1
-##  2  9.763900      1
-##  3  5.913436      1
-##  4  2.823562      1
-##  5  2.315488      1
-##  6 10.000000      0</code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw">head</span>(times)</span></code></pre></div>
+<pre><code>##   id  eventtime status
+## 1  1  4.0795945      1
+## 2  2 10.0000000      0
+## 3  3  4.1868793      1
+## 4  4  0.2630766      1
+## 5  5  7.5213303      1
+## 6  6  4.0806461      1</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="co">## id eventtime status</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="co">##  1  4.813339      1</span></span>
+<span id="cb20-3"><a href="#cb20-3"></a><span class="co">##  2  9.763900      1</span></span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="co">##  3  5.913436      1</span></span>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="co">##  4  2.823562      1</span></span>
+<span id="cb20-6"><a href="#cb20-6"></a><span class="co">##  5  2.315488      1</span></span>
+<span id="cb20-7"><a href="#cb20-7"></a><span class="co">##  6 10.000000      0</span></span></code></pre></div>
 <p>Of course, we have only simulated the event times here; we haven’t simulated any observed values for the longitudinal outcome. Moreover, although the <strong>simsurv</strong> package can be used for simulating joint longitudinal and time-to-event data, it did take a bit of work and several lines of code to achieve. Therefore, it is worth noting that the <strong>simjm</strong> package (<a href="https://github.com/sambrilleman/simjm" class="uri">https://github.com/sambrilleman/simjm</a>), which acts as a wrapper for <strong>simsurv</strong>, is designed specifically for this purpose. It can make the process a lot easier, since it shields the user from much of the work described in this example. Instead, the user can simulate joint longitudinal and time-to-event data using one function call to <code>simjm::simjm</code> and a number of optional arguments are available to alter the exact specification of the shared parameter joint model.</p>
 </div>
 </div>
@@ -435,6 +662,9 @@ times &lt;-<span class="st"> </span><span class="kw">simsurv</span>(<span class=
 <p>Royston P, Parmar MK. Flexible parametric proportional-hazards and proportional-odds models for censored survival data, with application to prognostic modelling and estimation of treatment effects. <em>Stat Med</em> 2002;<strong>21</strong>(15):2175-2197. </p>
 </div>
 
+
+
+<!-- code folding -->
 
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

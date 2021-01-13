@@ -152,22 +152,64 @@
 #' complex models such as joint longitudinal and survival models; the
 #' \strong{Examples} section provides an example of this.
 #'
-#' \subsection{Parameterisations for the Weibull distribution}{
-#' For the exponential and Weibull distributions, with scale parameter
-#' \eqn{lambda} and shape parameter \eqn{gamma} (with \eqn{gamma} fixed equal
-#' to 1 for the exponential distribution) the baseline hazard and survival
+#' \subsection{Parameterisation for the exponential distribution}{
+#' For the exponential distribution, with scale parameter
+#' \eqn{\lambda > 0}, the baseline hazard and survival
 #' functions used by \code{simsurv} are:
-#' \eqn{h(t) = \gamma \lambda t ^ {\gamma - 1}} and
-#' \eqn{S(t) = \exp(-\lambda t ^ {\gamma})}.
+#' \eqn{h(t) = \lambda} and
+#' \eqn{S(t) = \exp(-\lambda)}.
 #'
-#' Note that this parameterisation differs from the one used by
-#' \code{\link{dweibull}} or the \code{\link[eha]{phreg}} modelling
-#' function in the \pkg{eha} package. The parameterisation used in those
+#' Our parameterisation is equivalent to the one used by Wikipedia, the
+#' \code{\link{dexp}} function, the \pkg{eha} package, and the \pkg{flexsurv}
+#' package, except what we call the scale parameter
+#' they call the rate parameter.
+#' }
+#'
+#' \subsection{Parameterisation for the Weibull distribution}{
+#' For the Weibull distribution, with shape parameter \eqn{\gamma > 0}
+#' and scale parameter \eqn{\lambda > 0}, the baseline
+#' hazard and survival functions used by \code{simsurv} are:
+#' \eqn{h(t) = \gamma \lambda t ^ {\gamma - 1}} and
+#' \eqn{S(t) = \exp(-\lambda t ^ {\gamma})}. Setting \eqn{\gamma} equal
+#' to 1 leads to the exponential distribution as a special case.
+#'
+#' Our parameterisation differs from the one used by Wikipedia,
+#' \code{\link{dweibull}}, the \code{\link[eha]{phreg}} modelling
+#' function in the \pkg{eha} package, and the
+#' \code{\link[flexsurv]{flexsurvreg}} modelling function in the
+#' \pkg{flexsurv} package. The parameterisation used in those
 #' functions can be achieved by transforming the scale parameter via the
 #' relationship \eqn{b = \lambda ^ {\frac{-1}{\gamma}}}, or equivalently
 #' \eqn{\lambda = b ^ {-\gamma}} where \eqn{b} is the scale parameter under
-#' the parameterisation of the Weibull distribution used by
-#' \code{\link{dweibull}} or \code{\link[eha]{phreg}}.
+#' their parameterisation of the Weibull distribution.
+#' }
+#'
+#' \subsection{Parameterisation for the Gompertz distribution}{
+#' For the Gompertz distribution, with  and shape parameter \eqn{\gamma > 0}
+#' and scale parameter \eqn{\lambda > 0}, the baseline
+#' hazard and survival functions used by \code{simsurv} are:
+#' \eqn{h(t) = \lambda \exp(\gamma t)} and
+#' \eqn{S(t) = \exp(\frac{-\lambda (\exp(\gamma t) - 1)}{\gamma})}.
+#' Setting \eqn{\gamma} equal to 0 leads to the exponential distribution
+#' as a special case.
+#'
+#' Our parameterisation is equivalent to the one used by the
+#' \code{\link[flexsurv]{dgompertz}} and \code{\link[flexsurv]{flexsurvreg}}
+#' functions in the \pkg{flexsurv} package, except they use slightly different
+#' terminology. Their parameterisation can be achieved via the relationship
+#' \eqn{a = \gamma} and \eqn{b = \lambda} where \eqn{a} and \eqn{b} are their
+#' shape and rate parameters, respectively.
+#'
+#' Our parameterisation differs from the one used in the
+#' \code{\link[eha]{dgompertz}} and \code{\link[eha]{phreg}} functions
+#' in the \pkg{eha} package. Their parameterisation can be achieved via
+#' the relationship \eqn{a = \lambda} and \eqn{b = \frac{1}{\gamma}} where
+#' \eqn{a} and \eqn{b} are their shape and scale parameters, respectively.
+#'
+#' Our parameterisation differs from the one used by Wikipedia.
+#' Their parameterisation can be achieved via the relationship
+#' \eqn{a = \frac{\lambda}{\gamma}} and \eqn{b = \gamma} where
+#' \eqn{a} and \eqn{b} are their shape and scale parameters, respectively.
 #' }
 #'
 #' @note This package is modelled on the user-written \code{survsim} package
@@ -176,14 +218,19 @@
 #' @return A data frame with a row for each individual, and the following three
 #'   columns:
 #'   \itemize{
-#'     \item \code{id}  The individual identifier
+#'     \item \code{id} The individual identifier
 #'     \item \code{eventtime} The simulated event (or censoring) time
 #'     \item \code{status} The event indicator, 1 for failure, 0 for censored
 #'   }
 #'
-#' @author Sam Brilleman (\email{sam.brilleman@@monash.edu})
+#' @author Sam Brilleman (\email{sam.brilleman@@gmail.com})
 #'
 #' @references
+#'   Brilleman SL, Wolfe R, Moreno-Betancur M, and Crowther MJ. (2020)
+#'   Simulating survival data using the simsurv R package. \emph{Journal
+#'   of Statistical Software} \strong{96}(9), 1--27.
+#'   \doi{10.18637/jss.v097.i03}.
+#'
 #'   Crowther MJ, and Lambert PC. (2013) Simulating biologically plausible
 #'   complex survival data. \emph{Statistics in Medicine} \strong{32},
 #'   4118--4134. \doi{10.1002/sim.5823}
@@ -197,7 +244,7 @@
 #'
 #'   Crowther MJ, and Lambert PC. (2012) Simulating complex survival data.
 #'   \emph{The Stata Journal} \strong{12}(4), 674--687.
-#'   \url{http://www.stata-journal.com/sjpdf.html?articlenum=st0275}
+#'   \url{https://www.stata-journal.com/sjpdf.html?articlenum=st0275}
 #'
 #' @examples
 #'   #-------------- Simpler examples
@@ -607,8 +654,13 @@ simsurv <- function(dist = c("weibull", "exponential", "gompertz"),
     if (maxt <= 0)
       stop("'maxt' must be positive.")
     d <- as.integer(tt < maxt)
-    tt <- tt * d + maxt * (1 - d)
+    tt[d == 0] <- maxt # censored individuals
   } else {
+    n <- sum(is.infinite(tt))
+    if (n > 0)
+      warning("There were ", n, " event times evaluated at infinity (likely ",
+              "due to the hazard approaching zero). Perhaps consider ",
+              "specifying a finite censoring time using the 'maxt' argument.")
     d <- rep(1, N)
   }
   ret <- data.frame(id = if (!is.null(ids)) ids else seq(N),
@@ -664,7 +716,10 @@ get_inverted_surv <- function(dist = c("weibull", "exponential", "gompertz"),
     inv_surv <- function(u, x, betas) {
       eta <- if (!is.null(betas))
         sum(sapply(names(betas), function(i) betas[[i]] * x[[i]])) else 0L
-      t <- (1 / gammas[1L]) * log(((-gammas[1L]*log(u)) / (lambdas[1L]*exp(eta))) + 1)
+      check <- ((-gammas[1L]*log(u)) / (lambdas[1L]*exp(eta))) + 1
+      if (check < 0)
+        return(Inf)
+      t <- (1 / gammas[1L]) * log(check)
       return(t)
     }
   }
@@ -854,7 +909,7 @@ validate_gammas <- function(gammas = NULL, dist, mixture) {
     } else if (!mixture && (!length(gammas) == 1L)) {
       stop("'gammas' should be length 1.", call. = FALSE)
     }
-    if (any(gammas < 0))
+    if ((dist == "weibull") && any(gammas < 0))
       stop("'gammas' should be positive.", call. = FALSE)
   }
 }
@@ -1019,7 +1074,11 @@ STOP_nan_at_limit <- function() {
 STOP_increase_limit <- function() {
   stop("Could not find the simulated survival time for some individuals within ",
        "the specified interval. Try increasing the upper limit of the ",
-       "interval using the 'interval' argument.", call. = FALSE)
+       "interval using the 'interval' argument. If that doesn't work, then ",
+       "it may be because the hazard is approaching zero and leading to ",
+       "numerical underflow (ie. infinite survival times), in which case you ",
+       "must specify a finite censoring time using the 'maxt' argument.",
+       call. = FALSE)
 }
 STOP_decrease_limit <- function() {
   stop("Could not find the simulated survival time for some individuals within ",
