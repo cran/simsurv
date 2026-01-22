@@ -1,12 +1,14 @@
 Package: simsurv
 Type: Package
 Title: Simulate Survival Data
-Version: 1.0.0
-Date: 2021-01-09
+Version: 1.0.1
+Date: 2026-01-22
 Authors@R: c(person("Sam", "Brilleman", email = "sam.brilleman@gmail.com",
                     role = c("cre", "aut", "cph")),
              person("Alessandro", "Gasparini", email = "ag475@leicester.ac.uk",
                     role = "ctb"))
+Author: Sam Brilleman [cre, aut, cph],
+  Alessandro Gasparini [ctb]
 Maintainer: Sam Brilleman <sam.brilleman@gmail.com>
 Description: Simulate survival times from standard parametric survival
     distributions (exponential, Weibull, Gompertz), 2-component mixture
@@ -37,8 +39,6 @@ LazyData: true
 BugReports: https://github.com/sambrilleman/simsurv/issues
 RoxygenNote: 7.1.1
 NeedsCompilation: no
-Packaged: 2021-01-10 08:53:42 UTC; sbrilleman
-Author: Sam Brilleman [cre, aut, cph],
-  Alessandro Gasparini [ctb]
+Packaged: 2026-01-22 07:52:07 UTC; user
 Repository: CRAN
-Date/Publication: 2021-01-13 10:50:11 UTC
+Date/Publication: 2026-01-22 09:00:02 UTC
